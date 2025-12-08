@@ -61,9 +61,10 @@ jobs:
 
      - name: Requisição do web site do container
        continue-on-error: true # continua o job mesmo sob um erro
-       run: sleep 30s ; wget LB-API-Go-1557708893.us-east-2.elb.amazonaws.com:8000/Aurea
+       run: echo "REQUEST=0" >> GITHUB_ENV ; sleep 30s ; wget LB-API-Go-1557708893.us-east-2.elb.amazonaws.com:8000/Aurea || echo "REQUEST=1" >> GITHUB_ENV
 
      - name: Deploy Amazon ECS task definition da task definition do rollback
+       if: ${{ env.REQUEST != 0}} # se != 0 o if é verdadeiro e -> executa abaixo! Se não, REQUEST=0, if falso -> não executa abaixo.
        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
        with:
         task-definition: task-definition.json.old
