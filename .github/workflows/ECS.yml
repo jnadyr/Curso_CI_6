@@ -59,8 +59,8 @@ jobs:
         cluster: API-Go # (Nome do cluster lá na AWS)
         wait-for-service-stability: true # Não se sobe o serviço e vai-se adiante! Aguarda-se para ver se está tudo OK!
 
-     - name: Requisição do web site do container
-       continue-on-error: true # continua o job mesmo sob um erro
+     - name: Requisição do web site do container # Aqui ele faz o Rollback caso o job imediatamente acima falhe!
+       continue-on-error: true # continua o job, mesmo sob um erro.
        run: echo "REQUEST=0" >> GITHUB_ENV ; sleep 30s ; wget LB-API-Go-1557708893.us-east-2.elb.amazonaws.com:8000/Aurea || echo "REQUEST=1" >> GITHUB_ENV
 
      - name: Deploy Amazon ECS task definition da task definition do rollback
