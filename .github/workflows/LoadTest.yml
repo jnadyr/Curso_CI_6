@@ -18,3 +18,18 @@ jobs:
 
     - run: git clone https://github.com/jnadyr/Infra_CI.git # faz o git clone do repositório que cria a infra para o teste de carga.
     
+    - name: HashiCorp - Setup Terraform  # Faz a instalaçao do Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+      # Executa o terraform para iniciar a infra. Infra_CI/env/Homolog vem do git clone acima!
+    - run: terraform chdir=Infra_CI/env/Homolog init 
+
+    - run: terraform chdir=Infra_CI/env/Homolog destroy -auto-approve # Destroi toda a infra que for igual aquela que nós já temos!
+    
+    # Executa o terraform para aplicar a infra. Infra_CI/env/Homolog vem do git clone acima!
+    - run: terraform chdir=Infra_CI/env/Homolog apply -auto-approve # Aplica a infra nova!
+
+    - run: echo "$(terraform chdir=Infra_CI/env/Homolog output -raw -IP_alb)" # Obtém o endereço IP ou a URL do App Load Balancer
+    
+
+          
