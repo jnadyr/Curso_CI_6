@@ -18,5 +18,10 @@ jobs:
 
     - run: git clone https://github.com/jnadyr/Infra_CI.git # Clona o Terraform para criar e destruir a infra
 
+    - name: HashiCorp - Setup Terraform # Instala o Terraform no runner
+      uses: hashicorp/setup-terraform@v2.0.3
+
+          
+
     
 
