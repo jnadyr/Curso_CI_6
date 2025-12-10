@@ -23,7 +23,7 @@ jobs:
 
     - run: terraform -chdir=Infra/CI/env/Homolog init #inicia o Terraform
     
-    - run: terraform -chdir=Infra/CI/env/Homolog destroy # remove qq infra que, por acaso, tenha ficado ativa.
+    - run: terraform -chdir=Infra/CI/env/Homolog destroy -auto-approve # remove qq infra que, por acaso, tenha ficado ativa. Feito antes do apply!
 
     - run: terraform -chdir=Infra/CI/env/Homolog apply -auto-approve  # aplica o Terraform 
 
