@@ -22,10 +22,12 @@ jobs:
       uses: hashicorp/setup-terraform@v2.0.3
 
     - run: terraform -chdir=Infra/CI/env/Homolog init #inicia o Terraform
+    
+    - run: terraform -chdir=Infra/CI/env/Homolog destroy # remove qq infra que, por acaso, tenha ficado ativa.
 
     - run: terraform -chdir=Infra/CI/env/Homolog apply -auto-approve  # aplica o Terraform 
 
-    - run: echo "$(terraform -chdir=Infra/CI/env/Homolog output -raw IP_alb)" # pego a saída
+    - run: echo "$(terraform -chdir=Infra/CI/env/Homolog output -raw IP_alb)" # Executa o parêntesis e joga a saída para o terminal
 
     
-
+  
