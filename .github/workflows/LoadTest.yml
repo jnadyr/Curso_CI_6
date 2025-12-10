@@ -16,50 +16,18 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
 
-    - run: git clone https://github.com/jnadyr/Infra_CI.git # faz o git clone do repositório que cria a infra para o teste de carga.
-    
-    - name: HashiCorp - Setup Terraform  # Faz a instalaçao do Terraform
+    - run: git clone https://github.com/jnadyr/Infra_CI.git # Clona o Terraform para criar e destruir a infra
+
+    - name: HashiCorp - Setup Terraform # Instala o Terraform no runner
       uses: hashicorp/setup-terraform@v2.0.3
 
-      # Executa o terraform para iniciar a infra. Infra_CI/env/Homolog vem do git clone acima!
-    - run: terraform chdir=Infra_CI/env/Homolog init 
-
-    - run: terraform chdir=Infra_CI/env/Homolog destroy -auto-approve # Destroi toda a infra que for igual aquela que nós já temos!
+    - run: terraform -chdir=Infra/CI/env/Homolog init #inicia o Terraform
     
-    # Executa o terraform para aplicar a infra. Infra_CI/env/Homolog vem do git clone acima!
-    - run: terraform chdir=Infra_CI/env/Homolog apply -auto-approve # Aplica a infra nova!
+    - run: terraform -chdir=Infra/CI/env/Homolog destroy -auto-approve # remove qq infra que for igual e que, por acaso, tenha ficado ativa. Feito antes do apply!
 
-    - run: echo "$(terraform chdir=Infra_CI/env/Homolog output -raw -IP_alb)" # Obtém o endereço IP ou a URL do App Load Balancer
-      id: URL # utilizou-se um id pq o comando acima, apesar de raw, solta no final um caractere /n que remete a um Carriage Return.
-              # por causa do CR não é possível utilizar uma variável de ambiente!
-      
-    - name: Setup Python
-      uses: actions/setup-python@v6.1.0
-      with:
-        python-version: Python 3.12
+    - run: terraform -chdir=Infra/CI/env/Homolog apply -auto-approve  # aplica o Terraform 
 
-    - uses: BSFishy/pip-action@v1
-      with:
-        packages: |
-          locust #Principal lo ad tester de aplicação. Usa o Python como base e ele foi instalado imediatamente acima!
-
-    - run: |
-       echo "from locust import HttpUser, TaskSet, task, between" >> locustfile.py
-       echo "" >> locustfile.py
-       echo "class UserTasks(TaskSet):" >> locustfile.py
-       echo "	@task(1)" >> locustfile.py
-       echo "	def index(self):" >> locustfile.py
-       echo "		self.client.get("/Aurea")" >> locustfile.py
-       echo "" >> locustfile.py
-       echo "class WebsiteUser(HttpUser):" >> locustfile.py
-       echo "	tasks = [UserTasks]" >> locustfile.py
-       echo "	wait_time = between(1, 5)" >> locustfile.py
-
-    - name: Roda teste de carga # o app de teste é o locust
-      # sintaxe do lucust: 10 usuários; 5 rquisições /seg; 60 seg de tempo. Entre os colochetes: acessa-se a variável stdout que
-      # está nos steps, na URL, nos outputs e no standardout do linux.
-      run: sleep 60s ; locust -f locustfile.py --headless -u 10 -r 5 --run-time 60s -H http://${{ steps.URL.outputs.stdout }}
-          
+    - run: echo "$(terraform -chdir=Infra/CI/env/Homolog output -raw IP_alb)" # Executa o parêntesis e joga a saída para o terminal
+          # no comando acima, volta o IP ou URL do alb (app load balancer)
     
-
-          
+  
