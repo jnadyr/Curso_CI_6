@@ -29,5 +29,7 @@ jobs:
 
     - run: echo "$(terraform -chdir=Infra/CI/env/Homolog output -raw IP_alb)" # Executa o parêntesis e joga a saída para o terminal
           # no comando acima, volta o IP ou URL do alb (app load balancer)
+
+    - run: terraform -chdir=Infra/CI/env/Homolog destroy -auto-approve # remove qq infra que for igual e que, por acaso, tenha ficado ativa.
     
   
