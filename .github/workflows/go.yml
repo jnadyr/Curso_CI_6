@@ -73,7 +73,7 @@ jobs:
     secrets: inherit
 
   LoadTest:
-    needs: Docker
+    needs: Deploy_ECS
     if: ${{ github.ref_name == 'Homolog' }} # Executa apenas se na branch Homolog. Se for igual executa, senão não executa!
     uses: ./.github/workflows/LoadTest.yml
     secrets: inherit
