@@ -67,15 +67,19 @@ jobs:
 #    uses: ./.github/workflows/EC2.yml
 #    secrets: inherit
 
-  Deploy_ECS:
+#  Deploy_ECS:
+#    needs: Docker
+#    uses: ./.github/workflows/ECS.yml
+#    secrets: inherit
+
+#  LoadTest:
+#    needs: Deploy_ECS
+#    if: ${{ github.ref_name == 'Homolog' }} # Executa apenas se na branch Homolog. Se for igual executa, senão não executa!
+#    uses: ./.github/workflows/LoadTest.yml
+#    secrets: inherit
+    
+  Deploy_EKS:
     needs: Docker
-    uses: ./.github/workflows/ECS.yml
+    uses: ./.github/workflows/EKS.yml
     secrets: inherit
-
-  LoadTest:
-    needs: Deploy_ECS
-    if: ${{ github.ref_name == 'Homolog' }} # Executa apenas se na branch Homolog. Se for igual executa, senão não executa!
-    uses: ./.github/workflows/LoadTest.yml
-    secrets: inherit
-
 
