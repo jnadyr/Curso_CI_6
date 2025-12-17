@@ -24,4 +24,4 @@ jobs:
 
     - run: terraform -chdir=Infra_CI_Kubernetes/CI/env/Homolog init #inicia o Terraform
       
-      
+    - run: terraform -chdir=Infra_CI_Kubernetes/CI/env/Homolog apply -auto-aprove  # aplica o Terraform   
