@@ -17,5 +17,11 @@ jobs:
         aws-region: us-east-2
 
     - run: git clone https://github.com/jnadyr/Infra_CI_Kubernetes.git
+
+
+    - name: HashiCorp - Setup Terraform # Instala o Terraform no runner
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - run: terraform -chdir=Infra_CI_Kubernetes/CI/env/Homolog init #inicia o Terraform
       
       
