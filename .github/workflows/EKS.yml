@@ -29,6 +29,8 @@ jobs:
       
     - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply -auto-approve  # aplica o Terraform
 
+    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply output -raw IP_db  # captura o IP. # veio do main.tf
+
     - name: Kubectl tool installer
       uses: Azure/setup-kubectl@v4.0.0
       with:
