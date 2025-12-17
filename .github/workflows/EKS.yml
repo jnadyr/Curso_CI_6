@@ -24,9 +24,21 @@ jobs:
 
     - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog init #inicia o Terraform
 
-    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve #destroi a infraestrutura
-    - run: return 1
+#    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve #destroi a infraestrutura
+#    - run: return 1
       
-    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply -auto-approve  # aplica o Terraform   
+    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply -auto-approve  # aplica o Terraform
 
-    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve  # desfaz a infra criada com o Terraform   
+    - name: Kubectl tool installer
+      uses: Azure/setup-kubectl@v4.0.0
+      with:
+        # Version of kubectl
+        version: latest
+
+    - run: aws sts get-caller-identity # comando proveniente da documentação da AWS
+
+    - run: aws eks update-kubeconfig --region us-east-2 --name homolog2  # Cria arquivo kubeconfig automaticamente       
+
+    
+
+ #   - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve  # desfaz a infra criada com o Terraform   
