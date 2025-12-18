@@ -24,12 +24,12 @@ jobs:
 
     - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog init #inicia o Terraform
 
-#    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve #destroi a infraestrutura
+#    - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve #destroi a infraestrutura e não prossegue ´pr return=1
 #    - run: return 1
       
     - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply -auto-approve  # aplica o Terraform
 
-    - run: echo "$(terraform -chdir=Infra_CI_Kubernetes/env/Homolog apply output -raw IP_db)"  # captura o IP. # veio do main.tf
+    - run: echo "$(terraform -chdir=Infra_CI_Kubernetes/env/Homolog output -raw IP_db)"  # captura o IP. # veio do arq. main.tf
       id: URL
       
     - name: Kubectl tool installer
@@ -44,11 +44,11 @@ jobs:
 
     - run: kubectl get svc # testa a configuração
 
-    - run: kubectl create secret generic dbhost --from-literal=HOST=${{ steps.URL.output.stdout }}
-    - run: kubectl create secret generic dbport --from-literal=DBPORT=${{ secrets.DBPORT }}
-    - run: kubectl create secret generic dbuser --from-literal=USER=${{ secrets.DBUSER }}
-    - run: kubectl create secret generic dbpassword --from-literal=PASSWORD=${{ secrets.DBPASSWORD }}
-    - run: kubectl create secret generic dbname --from-literal=DBNAME=${{ secrets.DBNAME }}
+    - run: kubectl create secret generic dbhost --from-literal=HOST=${{steps.URL.output.stdout}}
+    - run: kubectl create secret generic dbport --from-literal=DBPORT=${{secrets.DBPORT}}
+    - run: kubectl create secret generic dbuser --from-literal=USER=${{secrets.DBUSER}}
+    - run: kubectl create secret generic dbpassword --from-literal=PASSWORD=${{secrets.DBPASSWORD}}
+    - run: kubectl create secret generic dbname --from-literal=DBNAME=${{secrets.DBNAME}}
     - run: kubectl create secret generic port --from-literal=PORT=8000
 
  #   - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve  # desfaz a infra criada com o Terraform   
