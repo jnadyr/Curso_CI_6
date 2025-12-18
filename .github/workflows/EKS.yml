@@ -64,4 +64,6 @@ jobs:
 
     - run: kubectl apply -f Infra_CI_Kubernetes/go.yaml  # Esta linha cria a aplicação
 
+    - run: kubectl set image deployment/go-api go=jnadyr/go_ci:${{github.run_number}}
+
  #   - run: terraform -chdir=Infra_CI_Kubernetes/env/Homolog destroy -auto-approve  # desfaz a infra criada com o Terraform   
