@@ -1,1 +1,1 @@
-# Curso_CI_6
+This involves connecting the workflow to a K8S cluster, automatically provisioning infrastructure within that cluster, and deploying the application to it. The tools used are GitHub Actions (GitHub's CI/CD tool) and AWS. By following these steps, you can dive deeper into CI/CD, including running AWS CLI commands directly, using K8S Secrets, and using GitHub Actions secrets.
